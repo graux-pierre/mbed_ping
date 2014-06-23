@@ -6,7 +6,6 @@
 /*Define and init mac addr and ip addr*/
 uint8_t mac_addr[6]={0x00,0x1e,0xc9,0x04,0x05,0x06};
 uint8_t ip_addr[4]={134,206,100,200};
->>>>>>> develop
 
 /*Define the rx descriptor and status structures*/
 #define NUMBER_PACKET_RX 5

@@ -61,7 +61,7 @@ void ping_request(uint8_t* buffer, uint8_t dest_mac_addr[6], uint8_t dest_ip_add
   ((IP_HEADER*)(buffer+14))->id[0] = 0;
   ((IP_HEADER*)(buffer+14))->id[1] = 0;
   ((IP_HEADER*)(buffer+14))->flags_fragment_position[0] = 0;
-  ((IP_HEADER*)(buffer+14))->flags_fragment_position[1] = 1;
+  ((IP_HEADER*)(buffer+14))->flags_fragment_position[1] = 0;
   ((IP_HEADER*)(buffer+14))->protocol = 1;
   ((IP_HEADER*)(buffer+14))->ip_source[0] = ip_addr[0];
   ((IP_HEADER*)(buffer+14))->ip_source[1] = ip_addr[1];
