@@ -74,7 +74,7 @@ uint16_t get_checksum(uint8_t* data, uint8_t size);
 
 void ping_request(uint8_t* buffer, uint8_t dest_mac_addr[6], uint8_t dest_ip_addr[4]);
 
-void arp_request(uint8_t* buffer, uint8_t dest_mac_addr[6], uint8_t dest_ip_addr[4]);
+void arp_request(uint8_t* buffer, uint8_t dest_mac_addr[6], uint8_t dest_ip_addr[4], uint8_t source_mac_addr[6], uint8_t source_ip_addr[4]);
 
 void pong_request(uint8_t* buffer, uint8_t dest_mac_addr[6], uint8_t dest_ip_addr[4], uint8_t id[2], uint8_t seq[2],const uint8_t* data, uint8_t data_size);
 
