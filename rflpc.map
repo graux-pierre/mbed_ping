@@ -9,7 +9,7 @@ Archive member included because of file (symbol)
 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(gpio.o)
                               /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(interrupt.o) (rflpc_gpio_set_val)
 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(uart.o)
-                              main.o (rflpc_uart_init)
+                              main.o (rflpc_uart_getchar)
 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(memcpy.o)
                               protocols.o (memcpy)
 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(printf.o)
@@ -24,10 +24,10 @@ Common symbol       size              file
 
 rx_status           0x28              main.o
 rx_buffers          0x1e0a            main.o
-tx_descriptors      0x28              main.o
+tx_descriptors      0x50              main.o
 rx_descriptors      0x28              main.o
-tx_buffers          0x1e0a            main.o
-tx_status           0x14              main.o
+tx_buffers          0x3c14            main.o
+tx_status           0x28              main.o
 
 Memory Configuration
 
@@ -43,7 +43,7 @@ LOAD main.o
 LOAD protocols.o
                 0x00000000                . = 0x0
 
-.text           0x00000000     0x2334
+.text           0x00000000     0x2308
                 0x00000000                _interrupt_start = .
  *(.interrupt_vector)
  .interrupt_vector
@@ -52,99 +52,100 @@ LOAD protocols.o
                 0x000000c4                _interrupt_end = .
  *(.text*)
  .text          0x000000c4      0x6ac main.o
-                0x000000c4                reply_arp
-                0x00000250                send_ping
-                0x00000368                send_pong
-                0x00000488                process_packet
-                0x00000590                ethernet_callback
-                0x00000630                ethernet_init
-                0x0000075c                main
- .text          0x00000770      0x274 protocols.o
+                0x000000c4                uart_callback
+                0x000000ec                reply_arp
+                0x00000268                send_ping
+                0x00000380                send_pong
+                0x000004a0                process_packet
+                0x00000578                ethernet_callback
+                0x00000618                ethernet_init
+                0x00000740                main
+ .text          0x00000770      0x288 protocols.o
                 0x00000770                get_checksum
                 0x000007ac                fill_ethernet_header
                 0x00000800                ping_request
                 0x00000888                pong_request
                 0x00000954                arp_request
- .text          0x000009e4       0x8c /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(init.o)
-                0x000009e4                _init_stack
-                0x00000a0c                _start
- .text          0x00000a70      0x328 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(interrupt.o)
-                0x00000a70                _default_exception_handler
-                0x00000d2c                _default_peripheral_handler
-                0x00000d5c                rflpc_irq_init
-                0x00000d88                rflpc_irq_set_handler
- .text          0x00000d98      0x538 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(ethernet.o)
-                0x00000dc4                rflpc_eth_init
-                0x00000f08                rflpc_eth_link_state
-                0x00000f18                rflpc_eth_set_link_mode
-                0x00000fb0                rflpc_eth_get_link_mode
-                0x00000fe4                rflpc_eth_link_auto_negociate
-                0x000010d0                rflpc_eth_set_rx_base_addresses
-                0x0000111c                rflpc_eth_set_tx_base_addresses
-                0x00001158                rflpc_eth_get_mac_address
-                0x0000117c                rflpc_eth_set_mac_address
-                0x000011a0                rflpc_eth_dump_internals
- .text          0x000012d0      0x14c /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(gpio.o)
-                0x000012d0                rflpc_gpio_use_pin
-                0x000012e0                rflpc_gpio_set_pin_mode_input
-                0x00001308                rflpc_gpio_set_pin
-                0x0000132c                rflpc_gpio_clr_pin
-                0x00001350                rflpc_gpio_set_pins_from_mask
-                0x0000136c                rflpc_gpio_clr_pins_from_mask
-                0x00001388                rflpc_gpio_set_pin_val
-                0x00001398                rflpc_gpio_set_pin_mode_output
-                0x000013cc                rflpc_gpio_set_val
-                0x000013e0                rflpc_gpio_get_pin
-                0x00001404                rflpc_gpio_get_val
- .text          0x0000141c      0x188 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(uart.o)
-                0x0000141c                rflpc_uart_putchar
-                0x00001434                rflpc_uart_byte_available
-                0x00001448                rflpc_uart_getchar
-                0x00001460                _rflpc_uart_init
-                0x000014b4                rflpc_uart_init
-                0x00001544                rflpc_uart_set_rx_callback
- .text          0x000015a4      0x140 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(memcpy.o)
-                0x00001630                memcpy
- .text          0x000016e4      0x2f0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(printf.o)
-                0x000016f4                printf
-                0x000019c8                rflpc_printf_set_putchar
- .text          0x000019d4       0xec /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(clock.o)
-                0x000019d4                rflpc_clock_init
-                0x00001ab4                rflpc_clock_get_system_clock
- .text          0x00001ac0       0xa0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(pinconf.o)
-                0x00001ac0                rflpc_pin_set
+ .text          0x000009f8       0x8c /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(init.o)
+                0x000009f8                _init_stack
+                0x00000a20                _start
+ .text          0x00000a84      0x328 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(interrupt.o)
+                0x00000a84                _default_exception_handler
+                0x00000d40                _default_peripheral_handler
+                0x00000d70                rflpc_irq_init
+                0x00000d9c                rflpc_irq_set_handler
+ .text          0x00000dac      0x538 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(ethernet.o)
+                0x00000dd8                rflpc_eth_init
+                0x00000f1c                rflpc_eth_link_state
+                0x00000f2c                rflpc_eth_set_link_mode
+                0x00000fc4                rflpc_eth_get_link_mode
+                0x00000ff8                rflpc_eth_link_auto_negociate
+                0x000010e4                rflpc_eth_set_rx_base_addresses
+                0x00001130                rflpc_eth_set_tx_base_addresses
+                0x0000116c                rflpc_eth_get_mac_address
+                0x00001190                rflpc_eth_set_mac_address
+                0x000011b4                rflpc_eth_dump_internals
+ .text          0x000012e4      0x14c /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(gpio.o)
+                0x000012e4                rflpc_gpio_use_pin
+                0x000012f4                rflpc_gpio_set_pin_mode_input
+                0x0000131c                rflpc_gpio_set_pin
+                0x00001340                rflpc_gpio_clr_pin
+                0x00001364                rflpc_gpio_set_pins_from_mask
+                0x00001380                rflpc_gpio_clr_pins_from_mask
+                0x0000139c                rflpc_gpio_set_pin_val
+                0x000013ac                rflpc_gpio_set_pin_mode_output
+                0x000013e0                rflpc_gpio_set_val
+                0x000013f4                rflpc_gpio_get_pin
+                0x00001418                rflpc_gpio_get_val
+ .text          0x00001430      0x188 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(uart.o)
+                0x00001430                rflpc_uart_putchar
+                0x00001448                rflpc_uart_byte_available
+                0x0000145c                rflpc_uart_getchar
+                0x00001474                _rflpc_uart_init
+                0x000014c8                rflpc_uart_init
+                0x00001558                rflpc_uart_set_rx_callback
+ .text          0x000015b8      0x140 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(memcpy.o)
+                0x00001644                memcpy
+ .text          0x000016f8      0x2f0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(printf.o)
+                0x00001708                printf
+                0x000019dc                rflpc_printf_set_putchar
+ .text          0x000019e8       0xec /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(clock.o)
+                0x000019e8                rflpc_clock_init
+                0x00001ac8                rflpc_clock_get_system_clock
+ .text          0x00001ad4       0xa0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(pinconf.o)
+                0x00001ad4                rflpc_pin_set
  *(.rodata*)
- .rodata        0x00001b60        0xc main.o
+ .rodata        0x00001b74        0xc main.o
  .rodata.str1.4
-                0x00001b6c      0x15f main.o
-                                0x160 (size before relaxing)
- *fill*         0x00001ccb        0x1 
+                0x00001b80      0x11b main.o
+                                0x11c (size before relaxing)
+ *fill*         0x00001c9b        0x1 
  .rodata.str1.4
-                0x00001ccc      0x4d6 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(interrupt.o)
+                0x00001c9c      0x4db /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(interrupt.o)
                                 0x4dc (size before relaxing)
- *fill*         0x000021a2        0x2 
- .rodata        0x000021a4        0xc /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(ethernet.o)
+ *fill*         0x00002177        0x1 
+ .rodata        0x00002178        0xc /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(ethernet.o)
  .rodata.str1.4
-                0x000021b0      0x170 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(ethernet.o)
- .rodata        0x00002320       0x14 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(gpio.o)
-                0x00002334                _text_end = .
+                0x00002184      0x170 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(ethernet.o)
+ .rodata        0x000022f4       0x14 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(gpio.o)
+                0x00002308                _text_end = .
 
-.glue_7         0x00002334        0x0
+.glue_7         0x00002308        0x0
  .glue_7        0x00000000        0x0 linker stubs
 
-.glue_7t        0x00002334        0x0
+.glue_7t        0x00002308        0x0
  .glue_7t       0x00000000        0x0 linker stubs
 
-.vfp11_veneer   0x00002334        0x0
+.vfp11_veneer   0x00002308        0x0
  .vfp11_veneer  0x00000000        0x0 linker stubs
 
-.v4_bx          0x00002334        0x0
+.v4_bx          0x00002308        0x0
  .v4_bx         0x00000000        0x0 linker stubs
 
-.iplt           0x00002334        0x0
+.iplt           0x00002308        0x0
  .iplt          0x00000000        0x0 main.o
 
-.rel.dyn        0x00002334        0x0
+.rel.dyn        0x00002308        0x0
  .rel.iplt      0x00000000        0x0 main.o
 
 .relocated_interrupt_vector
@@ -153,55 +154,57 @@ LOAD protocols.o
  .ram_int_vector
                 0x10000000       0xc4 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(interrupt.o)
 
-.bss            0x100000c4     0x3ca8
+.bss            0x100000c4     0x5af0
                 0x100000c4                _bss_start = .
                 0x100000c4                _ram_start = .
  *(.bss*)
- .bss           0x100000c4        0x0 main.o
- .bss           0x100000c4        0x0 protocols.o
- .bss           0x100000c4        0x4 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(init.o)
- .bss           0x100000c8        0x0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(interrupt.o)
- .bss           0x100000c8        0x0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(ethernet.o)
- .bss           0x100000c8        0x0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(gpio.o)
- .bss           0x100000c8        0x0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(uart.o)
- .bss           0x100000c8        0x0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(memcpy.o)
- .bss           0x100000c8        0x0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(printf.o)
- .bss           0x100000c8        0x0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(clock.o)
- .bss           0x100000c8        0x0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(pinconf.o)
- COMMON         0x100000c8     0x3ca4 main.o
-                0x100000c8                rx_status
-                0x100000f0                rx_buffers
-                0x10001efc                tx_descriptors
-                0x10001f24                rx_descriptors
-                0x10001f4c                tx_buffers
-                0x10003d58                tx_status
-                0x10003d6c                _bss_end = .
+ .bss           0x100000c4        0x1 main.o
+                0x100000c4                SEND_PING
+ .bss           0x100000c5        0x0 protocols.o
+ *fill*         0x100000c5        0x3 
+ .bss           0x100000c8        0x4 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(init.o)
+ .bss           0x100000cc        0x0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(interrupt.o)
+ .bss           0x100000cc        0x0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(ethernet.o)
+ .bss           0x100000cc        0x0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(gpio.o)
+ .bss           0x100000cc        0x0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(uart.o)
+ .bss           0x100000cc        0x0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(memcpy.o)
+ .bss           0x100000cc        0x0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(printf.o)
+ .bss           0x100000cc        0x0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(clock.o)
+ .bss           0x100000cc        0x0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(pinconf.o)
+ COMMON         0x100000cc     0x5ae8 main.o
+                0x100000cc                rx_status
+                0x100000f4                rx_buffers
+                0x10001f00                tx_descriptors
+                0x10001f50                rx_descriptors
+                0x10001f78                tx_buffers
+                0x10005b8c                tx_status
+                0x10005bb4                _bss_end = .
 
-.data           0x10003d6c       0x34 load address 0x00002334
-                0x10003d6c                _data_start = .
+.data           0x10005bb4       0x34 load address 0x00002308
+                0x10005bb4                _data_start = .
  *(.data*)
- .data          0x10003d6c        0xc main.o
-                0x10003d6c                ip_addr
-                0x10003d70                mac_addr
- .data          0x10003d78        0x0 protocols.o
- .data          0x10003d78        0x0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(init.o)
- .data          0x10003d78        0x0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(interrupt.o)
- .data          0x10003d78        0x0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(ethernet.o)
- .data          0x10003d78        0x0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(gpio.o)
- .data          0x10003d78       0x20 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(uart.o)
- .data          0x10003d98        0x0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(memcpy.o)
- .data          0x10003d98        0x4 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(printf.o)
- .data          0x10003d9c        0x4 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(clock.o)
- .data          0x10003da0        0x0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(pinconf.o)
-                0x10003da0                _data_end = .
+ .data          0x10005bb4        0xc main.o
+                0x10005bb4                ip_addr
+                0x10005bb8                mac_addr
+ .data          0x10005bc0        0x0 protocols.o
+ .data          0x10005bc0        0x0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(init.o)
+ .data          0x10005bc0        0x0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(interrupt.o)
+ .data          0x10005bc0        0x0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(ethernet.o)
+ .data          0x10005bc0        0x0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(gpio.o)
+ .data          0x10005bc0       0x20 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(uart.o)
+ .data          0x10005be0        0x0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(memcpy.o)
+ .data          0x10005be0        0x4 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(printf.o)
+ .data          0x10005be4        0x4 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(clock.o)
+ .data          0x10005be8        0x0 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(pinconf.o)
+                0x10005be8                _data_end = .
 
-.igot.plt       0x10003da0        0x0 load address 0x00002368
+.igot.plt       0x10005be8        0x0 load address 0x0000233c
  .igot.plt      0x00000000        0x0 main.o
 
-.stack          0x10003da0      0x400 load address 0x00002368
+.stack          0x10005be8      0x400 load address 0x0000233c
  *(.stack)
- .stack         0x10003da0      0x400 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(init.o)
-                0x10003da0                _stack
+ .stack         0x10005be8      0x400 /home/graux/Documents/mbed/rflpc/rflpc17xx/librflpc17xx.a(init.o)
+                0x10005be8                _stack
 
 .out_ram
  *(.out_ram)

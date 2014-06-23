@@ -3,6 +3,9 @@
 /*Define packet protocols headers*/
 #include "protocols.h"
 
+/*UART ask to PING ?*/
+uint8_t SEND_PING = 0;
+
 /*Define and init mac addr and ip addr*/
 uint8_t mac_addr[6]={0x00,0x1e,0xc9,0x04,0x05,0x06};
 uint8_t ip_addr[4]={134,206,100,200};
@@ -14,7 +17,7 @@ rflpc_eth_rx_status_t  rx_status[NUMBER_PACKET_RX];
 
 
 /*Define the tx descriptor and status structures*/
-#define NUMBER_PACKET_TX 5
+#define NUMBER_PACKET_TX 10
 rflpc_eth_descriptor_t tx_descriptors[NUMBER_PACKET_TX];
 rflpc_eth_tx_status_t  tx_status[NUMBER_PACKET_TX];
 
@@ -23,7 +26,7 @@ rflpc_eth_tx_status_t  tx_status[NUMBER_PACKET_TX];
 uint8_t tx_buffers[NUMBER_PACKET_TX][SIZE_BUFFER];
 uint8_t rx_buffers[NUMBER_PACKET_RX][SIZE_BUFFER];
 
-void reply_arp(uint8_t mac_dest[6], uint8_t ip_dest[4]){
+void reply_arp(uint8_t mac_dest[6], uint8_t ip_dest[4], uint8_t source_mac_addr[6], uint8_t source_ip_addr[4]){
   rflpc_eth_descriptor_t* p_descriptor = NULL;
   rflpc_eth_tx_status_t*  p_tx_status = NULL;
 
@@ -41,11 +44,10 @@ void reply_arp(uint8_t mac_dest[6], uint8_t ip_dest[4]){
     p_tx_status->status_info = 0;
     
     /*Create an arp request*/
-    arp_request((uint8_t*)p_descriptor->packet,mac_dest,ip_dest);
+    arp_request((uint8_t*)p_descriptor->packet,mac_dest,ip_dest,source_mac_addr,source_ip_addr);
 
     /*Send the packet (only 1 descriptor)*/
     rflpc_eth_done_process_tx_packet (1); 
-    printf("Reply arp to %i.%i.%i.%i\n\r",ip_dest[0],ip_dest[1],ip_dest[2],ip_dest[3]);
   }
 }
 
@@ -107,7 +109,8 @@ void process_packet(rflpc_eth_descriptor_t* p_descriptor,  rflpc_eth_rx_status_t
     if( h_arp->operation[1] == 1 ){
       /*Asking me ?*/
       if(h_arp->target_logical_addr[0] == ip_addr[0] && h_arp->target_logical_addr[1] == ip_addr[1] && h_arp->target_logical_addr[2] == ip_addr[2] && h_arp->target_logical_addr[3] == ip_addr[3])
-	reply_arp(h_arp->sender_hardware_addr,h_arp->sender_logical_addr);
+	reply_arp(h_arp->sender_hardware_addr,h_arp->sender_logical_addr,mac_addr,ip_addr);
+      
     }
   }
   
@@ -121,14 +124,10 @@ void process_packet(rflpc_eth_descriptor_t* p_descriptor,  rflpc_eth_rx_status_t
       /*Ping*/
       if(h_icmp->type == 8 && h_icmp->code == 0){
 	if(h_ip->ip_dest[0] == ip_addr[0] && h_ip->ip_dest[1] == ip_addr[1] && h_ip->ip_dest[2] == ip_addr[2] && h_ip->ip_dest[3] == ip_addr[3]){
-	  printf("PING\r\n");
+	  printf("PING receive\r\n");
 	  send_pong(h_ethernet->source,h_ip->ip_source,h_icmp->id,h_icmp->seq_num,(const uint8_t*)(p_descriptor->packet+42),(h_ip->total_length[0]<<8)+h_ip->total_length[1]-28);
 	}
       }
-
-      /*Ping answer*/
-      else if(h_icmp->type == 0 && h_icmp->code == 0)
-	printf("PONG from %i.%i.%i.%i to %i.%i.%i.%i\r\n",h_ip->ip_source[0],h_ip->ip_source[1],h_ip->ip_source[2],h_ip->ip_source[3],h_ip->ip_dest[0],h_ip->ip_dest[1],h_ip->ip_dest[2],h_ip->ip_dest[3]);
 
     }
 
@@ -204,6 +203,12 @@ void ethernet_init(){
   printf("Ethernet enabled\r\n");
 }
 
+RFLPC_IRQ_HANDLER uart_callback()
+{
+  if(rflpc_uart_getchar(RFLPC_UART0)=='p')
+    SEND_PING = 1;
+}
+
 int main()
 {
   /*Enable uart for printf*/
@@ -212,11 +217,18 @@ int main()
   /*Init and configure ethernet*/
   ethernet_init();
 
-  send_ping();
+  /*Callback to get the instructions*/
+  rflpc_uart_set_rx_callback(RFLPC_UART0, uart_callback);
 
   /*Infinite boucle*/
-  while(1)
-    rflpc_idle;
+  while(1){
+    if(SEND_PING){
+      send_ping();
+      SEND_PING = 0;
+    }
+    else
+      rflpc_idle;
+  }
  
   return 0;
 }
