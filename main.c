@@ -3,6 +3,9 @@
 /*Define packet protocols headers*/
 #include "protocols.h"
 
+/*Fonctions to draw stat on LCD screen*/
+#include "lcd_stat.h"
+
 /*UART ask to PING ?*/
 uint8_t SEND_PING = 0;
 
@@ -17,7 +20,7 @@ rflpc_eth_rx_status_t  rx_status[NUMBER_PACKET_RX];
 
 
 /*Define the tx descriptor and status structures*/
-#define NUMBER_PACKET_TX 10
+#define NUMBER_PACKET_TX 5
 rflpc_eth_descriptor_t tx_descriptors[NUMBER_PACKET_TX];
 rflpc_eth_tx_status_t  tx_status[NUMBER_PACKET_TX];
 
@@ -102,7 +105,11 @@ void process_packet(rflpc_eth_descriptor_t* p_descriptor,  rflpc_eth_rx_status_t
   ARP_HEADER* h_arp = (ARP_HEADER*)(p_descriptor->packet+14);
   IP_HEADER* h_ip = (IP_HEADER*)(p_descriptor->packet+14);
   ICMP_HEADER* h_icmp = (ICMP_HEADER*)(p_descriptor->packet+34);
-  
+  extern uint16_t current_nb;
+
+  /*Increment the number of packets for stats*/
+  current_nb++;
+
   /*Is it ARP ?*/
   if( h_ethernet->ether_type[0] == 0x08 && h_ethernet->ether_type[1] == 0x06 ){
     /*Is it a request?*/
@@ -141,7 +148,7 @@ RFLPC_IRQ_HANDLER ethernet_callback(){
   
   /*Is callback call by RFLPC_ETH_IRQ_EN_RX_DONE ?*/
   if( rflpc_eth_irq_get_status () & RFLPC_ETH_IRQ_EN_RX_DONE) {
-    
+  
     /*While there is packet to read*/
     while( rflpc_eth_rx_available() ) {
 
@@ -157,8 +164,7 @@ RFLPC_IRQ_HANDLER ethernet_callback(){
       /*Stop the IRQ*/
       rflpc_eth_irq_clear (RFLPC_ETH_IRQ_EN_RX_DONE);
     }
-  }
- 
+  } 
 }
 
 void ethernet_init(){
@@ -217,9 +223,12 @@ int main()
   /*Init and configure ethernet*/
   ethernet_init();
 
+  /*Init LCD Stats*/
+  lcd_stat_init();
+
   /*Callback to get the instructions*/
   rflpc_uart_set_rx_callback(RFLPC_UART0, uart_callback);
-
+  
   /*Infinite boucle*/
   while(1){
     if(SEND_PING){
