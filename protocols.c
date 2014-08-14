@@ -10,6 +10,7 @@ uint16_t get_checksum(uint8_t* data, uint8_t size){
     checksum += (*data<<8) + *(data+1);
 
   checksum = (checksum >> 16) + (checksum & 0xffff);
+  checksum = (checksum >> 16) + (checksum & 0xffff);
   
   return (~checksum)&0xffff;
 } 

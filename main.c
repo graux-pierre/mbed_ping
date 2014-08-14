@@ -17,7 +17,7 @@ uint8_t ip_addr[4]={134,206,100,200};
 #define NUMBER_PACKET_RX 5
 rflpc_eth_descriptor_t rx_descriptors[NUMBER_PACKET_RX];
 rflpc_eth_rx_status_t  rx_status[NUMBER_PACKET_RX];
-
+ 
 
 /*Define the tx descriptor and status structures*/
 #define NUMBER_PACKET_TX 5
@@ -51,6 +51,7 @@ void reply_arp(uint8_t mac_dest[6], uint8_t ip_dest[4], uint8_t source_mac_addr[
 
     /*Send the packet (only 1 descriptor)*/
     rflpc_eth_done_process_tx_packet (1); 
+    printf("Arp reply\r\n");
   }
 }
 
@@ -215,11 +216,17 @@ RFLPC_IRQ_HANDLER uart_callback()
     SEND_PING = 1;
 }
 
+
+void disable_all_it(){
+  *(uint32_t*) 0xE000E180 = 0xffffffff;
+  *(uint32_t*) 0xE000E184 = 0b111;
+}
+
 int main()
 {
   /*Enable uart for printf*/
   rflpc_uart_init(RFLPC_UART0);
-
+  
   /*Init and configure ethernet*/
   ethernet_init();
 
